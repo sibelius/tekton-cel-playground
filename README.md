@@ -83,11 +83,14 @@ extra configuration needed. The Go runtime is detected automatically from
 ## Project layout
 
 ```
-api/evaluate.go         Vercel serverless function (production)
-main.go                 Local dev HTTP server
-internal/celeval/       Shared parser + CEL evaluator
-src/app/                Next.js frontend
+api/evaluate.go    CEL evaluator + Vercel-style Handler (also used in dev)
+main.go            Local dev HTTP server (wraps api.Handler on :3002)
+src/app/           Next.js frontend
 ```
+
+> All evaluator code lives in `api/evaluate.go` because Vercel's Go builder
+> re-roots functions as a synthetic module, which prevents them from importing
+> `internal/...` packages from the rest of the repo.
 
 ## Contributing
 
