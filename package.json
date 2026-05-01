@@ -3,7 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "concurrently -n api,web -c blue,green \"pnpm dev:api\" \"pnpm dev:web\"",
+    "dev:web": "next dev --turbopack",
+    "dev:api": "nodemon --watch main.go --watch go.mod --watch internal --watch api --ext go,mod --signal SIGTERM --exec \"go build -o ./tmp/server . && ./tmp/server\"",
+    "dev:api:once": "go run main.go",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -20,8 +23,10 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "concurrently": "^9.2.1",
     "eslint": "^9",
     "eslint-config-next": "15.1.2",
+    "nodemon": "^3.1.14",
     "typescript": "^5"
   }
 }
